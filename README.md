@@ -19,5 +19,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Trunk
-        uses: mbround18/trunk-rs@v1.0.0
+        uses: mbround18/trunk-rs@v0.0.1
 ```
