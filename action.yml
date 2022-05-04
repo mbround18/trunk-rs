@@ -1,6 +1,6 @@
 name: Trunk Install
 author: mbround18
-description: Installs trunk
+description: Installs trunk to path
 branding:
   icon: arrow-down
   color: purple
