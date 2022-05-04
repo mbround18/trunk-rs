@@ -1,0 +1,70 @@
+name: Trunk Install
+author: mbround18
+description: Installs trunk
+branding:
+  icon: arrow-down
+  color: purple
+inputs:
+  jqVersion:
+    description: "Version if jq to use"
+    required: true
+    default: "1.6"
+  version:
+    description: "Version of trunk to install"
+    required: true
+    default: "latest"
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Bins
+      shell: bash
+      run: |
+        export BIN_PATH="${GITHUB_ACTION_PATH}/.bin"
+        mkdir -p "${BIN_PATH}"
+        echo "${BIN_PATH}" >> $GITHUB_PATH
+
+    - name: Setup JQ
+      shell: bash
+      if: inputs.version == 'latest'
+      run: |
+        if ! [ -x "$(command -v jq)" ]; then
+          echo "Setting jq path..."
+          export JQ_PATH="${GITHUB_ACTION_PATH}/.bin/jq"
+          echo "JQ_PATH=${JQ_PATH}"
+          echo "Downloading jq..."
+          wget -O "${JQ_PATH}" "https://github.com/stedolan/jq/releases/download/jq-${{inputs.jqVersion}}/jq-linux64"
+          echo "Making jq exectuabe..."
+          chmod +x "${JQ_PATH}"
+          echo "jq setup complete..."
+        fi
+
+    - name: Setup Trunk
+      shell: bash
+      run: |
+        if ! [ -x "$(command -v trunk)" ]; then
+          echo "Setting trunk path..."
+          export TRUNK_PATH="${GITHUB_ACTION_PATH}/.bin/trunk"
+          echo "TRUNK_PATH=${TRUNK_PATH}"
+
+          # Make TMP Dir
+          mkdir -p "${GITHUB_ACTION_PATH}/tmp"
+
+          # Set Trunk Url
+          export TRUNK_URL=""
+          echo "Downloading trunk..."
+          if [ "${{ inputs.version }}" = "latest" ]; then
+            echo "Fetching latest trunk release..."
+            export LATEST_TAG="$(curl https://api.github.com/repos/thedodd/trunk/releases/latest -s | jq .name -r | xargs)"
+            TRUNK_URL="https://github.com/thedodd/trunk/releases/download/${LATEST_TAG}/trunk-x86_64-unknown-linux-gnu.tar.gz "
+          else
+            TRUNK_URL="https://github.com/thedodd/trunk/releases/download/${{ inputs.version }}/trunk-x86_64-unknown-linux-gnu.tar.gz "
+          fi
+
+          # Download Trunk
+          cd "${GITHUB_ACTION_PATH}/tmp"
+          wget -c "${TRUNK_URL}" -O - | tar -xz
+          mv ./trunk "${TRUNK_PATH}"
+          echo "Making trunk executable..."
+          chmod +x "${TRUNK_PATH}"
+          echo "trunk setup complete..."
+        fi

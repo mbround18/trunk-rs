@@ -1,0 +1,14 @@
+{
+  "plugins": ["git-tag"],
+  "owner": "mbround18",
+  "repo": "trunk-rs",
+  "name": "mbround18",
+  "email": "12646562+mbround18@users.noreply.github.com",
+  "onlyPublishWithReleaseLabel": false,
+  "noDefaultLabels": true,
+  "labels": [
+    { "releaseType": "major", "name": "Version: Major" },
+    { "releaseType": "minor", "name": "Version: Minor" },
+    { "releaseType": "patch", "name": "Version: Patch" }
+  ]
+}
