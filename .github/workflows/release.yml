@@ -15,6 +15,6 @@ jobs:
           token: ${{ secrets.GH_TOKEN }} # <- This is required
 
       - name: Release
-        uses: mbround18/auto@v1.1.0
+        uses: mbround18/auto@v1.2.0
         with:
           token: ${{ secrets.GH_TOKEN }}
