@@ -55,7 +55,7 @@ runs:
           if [ "${{ inputs.version }}" = "latest" ]; then
             echo "Fetching latest trunk release..."
             export LATEST_TAG="$(curl https://api.github.com/repositories/288799056/releases/latest -s | jq .name -r | xargs)"
-            TRUNK_URL="https://github.com/trunk-rs/trunk/releases/download//${LATEST_TAG}/trunk-x86_64-unknown-linux-gnu.tar.gz"
+            TRUNK_URL="https://github.com/trunk-rs/trunk/releases/download/v${LATEST_TAG}/trunk-x86_64-unknown-linux-gnu.tar.gz"
           else
             TRUNK_URL="https://github.com/thedodd/trunk/releases/download/${{ inputs.version }}/trunk-x86_64-unknown-linux-gnu.tar.gz"
           fi
